@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fish Weight Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            margin: 5px;
+            background-color: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fish Weight Prediction</h1>
+    <form id="predictForm">
+        <label for="length">Length:</label><br>
+        <input type="number" id="length" name="length" required><br>
+        <label for="height">Height:</label><br>
+        <input type="number" id="height" name="height" required><br>
+        <label for="width">Width:</label><br>
+        <input type="number" id="width" name="width" required><br>
+        <button type="submit">Predict</button>
+    </form>
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('predictForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const length = document.getElementById('length').value;
+            const height = document.getElementById('height').value;
+            const width = document.getElementById('width').value;
+
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    features: [length, height, width]
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById('result').textContent = 'Predicted Weight: ' + data.prediction;
+        });
+    </script>
+</body>
+</html>
